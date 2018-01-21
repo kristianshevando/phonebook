@@ -109,10 +109,10 @@ class PhoneBook(QWidget):
 
        # model = QSqlQueryModel()
         query = QSqlQuery()
-        query.prepare("select * from phonebook where id = ? or name = ? or surname = ? " 
-                    "or phone = ? or city = ? or street = ? or house = ? or apartment = ?")
+        #query.prepare("select * from phonebook where id = ? or name = ? or surname = ? " 
+        #            "or phone = ? or city = ? or street = ? or house = ? or apartment = ?")
        # model.setQuery(query)
-        #query.exec_("select * from phonebook where name = ")
+        query.exec_("select * from phonebook where name = 'Alexey'")
         #query.exec_("select id, name, surname, phone, city, street, house, apartment from phonebook where name = 'Kristian'")  
         #if query.isValid() and query.isSelect():
         while query.next():
