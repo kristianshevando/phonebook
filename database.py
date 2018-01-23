@@ -98,23 +98,20 @@ class PhoneBook(QWidget):
         widget = QWidget()
         index = 0
 
-        # idText = int(self.editID.text())
-        # nameText = self.editName.text()
-        # surnameText = self.editSurname.text()
-        # phoneText = int(self.editPhone.text())
-        # cityText = self.editCity.text()
-        # streetText = self.editStreet.text()
-        # houseText = int(self.editHouse.text())
-        # apartmentText = int(self.editApartment.text())
+        idText = int(self.editID.text())
+        nameText = self.editName.text()
+        surnameText = self.editSurname.text()
+        phoneText = int(self.editPhone.text())
+        cityText = self.editCity.text()
+        streetText = self.editStreet.text()
+        houseText = int(self.editHouse.text())
+        apartmentText = int(self.editApartment.text())
 
-       # model = QSqlQueryModel()
         query = QSqlQuery()
-        #query.prepare("select * from phonebook where id = ? or name = ? or surname = ? " 
-        #            "or phone = ? or city = ? or street = ? or house = ? or apartment = ?")
-       # model.setQuery(query)
-        query.exec_("select * from phonebook where name = 'Alexey'")
-        #query.exec_("select id, name, surname, phone, city, street, house, apartment from phonebook where name = 'Kristian'")  
-        #if query.isValid() and query.isSelect():
+        query.exec_("select * from phonebook where id like {0} or name like '{1}' or surname like '{2}' " 
+                   "or phone like {3} or city like '{4}' or street like '{5}' or house like {6} or apartment like {7}"
+                   .format(idText, nameText, surnameText, phoneText, cityText, streetText, houseText, apartmentText))
+        #query.exec_("select * from phonebook where name = 'Alexey'")
         while query.next():
             ids = query.value(0)
             name = query.value(1)
@@ -136,8 +133,6 @@ class PhoneBook(QWidget):
             self.table.setItem(index, 7, QTableWidgetItem(str(apartment)))
 
             index += 1    
-        # else:
-        #     QMessageBox.critical(None, "idi nahui", QMessageBox.Cancel)
 
     def downloadData(self, event):
         index = 0
@@ -207,7 +202,8 @@ class PhoneBook(QWidget):
     def db_create(self):
         query = QSqlQuery()
         query.exec_("create table phonebook(id int primary key, "
-                   "name varchar(20), surname varchar(20), phone int(10), city varchar(15), street varchar(15), house int(6), apartment int(6))")
+                   "name varchar(20), surname varchar(20), phone int(10), city varchar(15), "
+                   "street varchar(15), house int(6), apartment int(6))")
 
     def init(self, filename, server):
         import os
