@@ -110,8 +110,8 @@ class PhoneBook(QWidget):
         query = QSqlQuery()
         
 
-        query.exec_("select * from phonebook where id like '{0}' or name like '{1}' or surname like '{2}' " 
-                   "or phone like '{3}' or city like '{4}' or street like '{5}' or house like '{6}' or apartment like '{7}'"
+        query.exec_("select * from phonebook where id like {0} or name like '{1}' or surname like '{2}' " 
+                   "or phone like {3} or city like '{4}' or street like '{5}' or house like {6} or apartment like {7}"
                    .format(idText, nameText, surnameText, phoneText, cityText, streetText, houseText, apartmentText))
         
         while query.next():
