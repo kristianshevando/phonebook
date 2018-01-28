@@ -18,7 +18,6 @@ class PhoneBook(QWidget):
 
         self.labelID = QLabel("ID")
         self.editID = QLineEdit()
-        self.editID.setText("0")
         self.editID.setPlaceholderText("Unique identification number")
 
         self.labelName = QLabel("Name")
@@ -31,7 +30,6 @@ class PhoneBook(QWidget):
 
         self.labelPhone = QLabel("Phone")
         self.editPhone = QLineEdit()
-        self.editPhone.setText("0")
         self.editPhone.setPlaceholderText("Phone number")
 
         self.labelCity = QLabel("City")
@@ -44,12 +42,10 @@ class PhoneBook(QWidget):
 
         self.labelHouse = QLabel("House")
         self.editHouse = QLineEdit()
-        self.editHouse.setText("0")
         self.editHouse.setPlaceholderText("House number")
 
         self.labelApartment = QLabel("Apartment")
         self.editApartment = QLineEdit()
-        self.editApartment.setText("0")
         self.editApartment.setPlaceholderText("Apartment number")
 
         grid = QGridLayout()
@@ -70,23 +66,15 @@ class PhoneBook(QWidget):
         grid.addWidget(self.labelApartment, 7, 0)
         grid.addWidget(self.editApartment, 7, 1)
 
-        downloadDataButton = QPushButton("Download data")
-        downloadDataButton.clicked.connect(self.downloadData)
-        
-        searchDataButton = QPushButton("Search data")
-        searchDataButton.clicked.connect(self.search)
+        self.searchDataButton = QPushButton("Search")
+        self.searchDataButton.clicked.connect(self.search)
 
-        insertDataButton = QPushButton("Insert data")
-        insertDataButton.clicked.connect(self.insertData)
-
-        removeDataButton = QPushButton("Remove data")
-        removeDataButton.clicked.connect(self.removeData)
+        self.exitButton = QPushButton("Exit")
+        self.exitButton.clicked.connect(self.close)
 
         hBox = QHBoxLayout()
-        hBox.addWidget(downloadDataButton)
-        hBox.addWidget(searchDataButton)
-        hBox.addWidget(insertDataButton)
-        hBox.addWidget(removeDataButton)
+        hBox.addWidget(self.searchDataButton)
+        hBox.addWidget(self.exitButton)
 
         vBox = QVBoxLayout()
         vBox.addLayout(grid)
@@ -95,55 +83,25 @@ class PhoneBook(QWidget):
         vBox.addWidget(self.table)
 
         self.setWindowTitle("Phonebook")
-        #self.resize(362, 320)
         self.resize(824, 320)
-        #self.setFixedSize(824, 320)
         self.setLayout(vBox)
 
     def search(self, event):
-        widget = QWidget()
         index = 0
 
-        idText = int(self.editID.text())
+        idText = self.editID.text()
         nameText = self.editName.text()
         surnameText = self.editSurname.text()
-        phoneText = int(self.editPhone.text())
+        phoneText = self.editPhone.text()
         cityText = self.editCity.text()
         streetText = self.editStreet.text()
-        houseText = int(self.editHouse.text())
-        apartmentText = int(self.editApartment.text())
+        houseText = self.editHouse.text()
+        apartmentText = self.editApartment.text()
 
         query = QSqlQuery()
         query.exec_("select * from phonebook where id like {0} or name like '{1}' or surname like '{2}' " 
                    "or phone like {3} or city like '{4}' or street like '{5}' or house like {6} or apartment like {7}"
                    .format(idText, nameText, surnameText, phoneText, cityText, streetText, houseText, apartmentText))
-        
-        while query.next():
-            ids = query.value(0)
-            name = query.value(1)
-            surname = query.value(2)
-            phone = query.value(3)
-            city = query.value(4)
-            street = query.value(5)
-            house = query.value(6)
-            apartment = query.value(7)
-
-            self.table.setRowCount(index + 1)
-            self.table.setItem(index, 0, QTableWidgetItem(str(ids)))
-            self.table.setItem(index, 1, QTableWidgetItem(name))
-            self.table.setItem(index, 2, QTableWidgetItem(surname))
-            self.table.setItem(index, 3, QTableWidgetItem(str(phone)))
-            self.table.setItem(index, 4, QTableWidgetItem(city))
-            self.table.setItem(index, 5, QTableWidgetItem(street))
-            self.table.setItem(index, 6, QTableWidgetItem(str(house)))
-            self.table.setItem(index, 7, QTableWidgetItem(str(apartment)))
-
-            index += 1    
-
-    def downloadData(self, event):
-        index = 0
-        query = QSqlQuery()
-        query.exec_("select * from phonebook")
 
         while query.next():
             ids = query.value(0)
@@ -167,32 +125,6 @@ class PhoneBook(QWidget):
 
             index += 1
 
-    def insertData(self, event):
-        ids = int(self.editID.text())
-        name = self.editName.text()
-        surname = self.editSurname.text()
-        phone = int(self.editPhone.text())
-        city = self.editCity.text()
-        street = self.editStreet.text()
-        house = int(self.editHouse.text())
-        apartment = int(self.editApartment.text())
-
-        query = QSqlQuery()
-        query.exec_("insert into phonebook values({0}, '{1}', '{2}', {3}, '{4}', '{5}', {6}, {7})".
-        format(ids, name, surname, phone, city, street, house, apartment))
-
-    def removeData(self, event):
-        selected = self.table.currentIndex()
-        if not selected.isValid() or len(self.table.selectedItems()) < 1:
-            return
-
-        ids = self.table.selectedItems()[0]
-        query = QSqlQuery()
-        query.exec_("remove from phonebook where id = " + ids.text())
-
-        self.table.removeRow(selected.row())
-        self.table.setCurrentIndex(QModelIndex())
-
     def db_connect(self, filename, server):
         db = QSqlDatabase.addDatabase(server)
         db.setDatabaseName(filename)
@@ -205,24 +137,22 @@ class PhoneBook(QWidget):
             return False
         return True
 
-    def db_create(self):
-        query = QSqlQuery()
-        query.exec_("create table phonebook(id int primary key, "
-                   "name varchar(20), surname varchar(20), phone int(10), city varchar(15), "
-                   "street varchar(15), house int(6), apartment int(6))")
+    # def db_create(self):
+    #     query = QSqlQuery()
+    #     query.exec_("create table phonebook(id int primary key, "
+    #                "name varchar(20), surname varchar(20), phone int(10), city varchar(15), street varchar(15), house int(6), apartment int(6))")
 
-    def init(self, filename, server):
-        import os
-        if not os.path.exists(filename):
-            self.db_connect(filename, server)
-            self.db_create()
-        else:
-            self.db_connect(filename, server)
+    # def init(self, filename, server):
+    #     import os
+    #     if not os.path.exists(filename):
+    #         self.db_connect(filename, server)
+    #         self.db_create()
+    #     else:
+    #         self.db_connect(filename, server)
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication(sys.argv)
     book = PhoneBook()
-    book.init('datafile', 'QSQLITE')
+    book.db_connect('datafile', 'QSQLITE')
     book.show()
     sys.exit(app.exec_())
