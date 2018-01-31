@@ -4,11 +4,14 @@ from PyQt5.QtSql import *
 from PyQt5.QtCore import Qt, QModelIndex
 from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QPushButton, \
  QTableWidget, QTableWidgetItem, QMessageBox, QHBoxLayout, QLineEdit, QLabel, QGridLayout     
-
+from PyQt5 import QtNetwork
 
 class PhoneBook(QWidget):
     def __init__(self, parent = None):
         super(PhoneBook, self).__init__(parent)
+
+        self.socket = None
+
         self.table = QTableWidget(0, 8)
         self.table.setHorizontalHeaderLabels(['ID', 'NAME', 'SURNAME', 'PHONE', 'CITY', 'STREET', 'HOUSE', 'APARTMENT'])
         self.table.setAlternatingRowColors(True)
@@ -18,6 +21,7 @@ class PhoneBook(QWidget):
 
         self.labelID = QLabel("ID")
         self.editID = QLineEdit()
+        self.editID.setText("0")
         self.editID.setPlaceholderText("Unique identification number")
 
         self.labelName = QLabel("Name")
@@ -30,6 +34,7 @@ class PhoneBook(QWidget):
 
         self.labelPhone = QLabel("Phone")
         self.editPhone = QLineEdit()
+        self.editPhone.setText("0")
         self.editPhone.setPlaceholderText("Phone number")
 
         self.labelCity = QLabel("City")
@@ -42,10 +47,12 @@ class PhoneBook(QWidget):
 
         self.labelHouse = QLabel("House")
         self.editHouse = QLineEdit()
+        self.editHouse.setText("0")
         self.editHouse.setPlaceholderText("House number")
 
         self.labelApartment = QLabel("Apartment")
         self.editApartment = QLineEdit()
+        self.editApartment.setText("0")
         self.editApartment.setPlaceholderText("Apartment number")
 
         grid = QGridLayout()
@@ -85,6 +92,10 @@ class PhoneBook(QWidget):
         self.setWindowTitle("Phonebook")
         self.resize(824, 320)
         self.setLayout(vBox)
+
+    def server_connect(self):
+        try:
+            
 
     def search(self, event):
         index = 0
