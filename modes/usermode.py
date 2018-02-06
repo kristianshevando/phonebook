@@ -76,11 +76,15 @@ class PhoneBook(QWidget):
         self.searchDataButton = QPushButton("Search")
         self.searchDataButton.clicked.connect(self.search)
 
+        self.clearTableButton = QPushButton("Clear table")  
+        self.clearTableButton.clicked.connect(self.table.clearContents)
+
         self.exitButton = QPushButton("Exit")
         self.exitButton.clicked.connect(self.close)
 
         hBox = QHBoxLayout()
         hBox.addWidget(self.searchDataButton)
+        hBox.addWidget(self.clearTableButton)
         hBox.addWidget(self.exitButton)
 
         vBox = QVBoxLayout()
@@ -92,10 +96,6 @@ class PhoneBook(QWidget):
         self.setWindowTitle("Phonebook")
         self.resize(824, 320)
         self.setLayout(vBox)
-
-    def server_connect(self):
-        try:
-            
 
     def search(self, event):
         index = 0

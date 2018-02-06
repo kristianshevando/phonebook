@@ -95,9 +95,7 @@ class PhoneBook(QWidget):
         vBox.addWidget(self.table)
 
         self.setWindowTitle("Phonebook")
-        #self.resize(362, 320)
         self.resize(824, 320)
-        #self.setFixedSize(824, 320)
         self.setLayout(vBox)
 
     def search(self, event):
