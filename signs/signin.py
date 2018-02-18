@@ -1,14 +1,17 @@
 import sys
 
+sys.path.append("../phonebook/modes/")
+from adminmode import AdminMode
+
 from PyQt5.QtSql import *  
 from PyQt5.QtCore import Qt, QModelIndex
 from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QPushButton, \
  QTableWidget, QTableWidgetItem, QMessageBox, QHBoxLayout, QLineEdit, QLabel, QGridLayout 
 
 
-class Authentication(QWidget):
+class SignIn(QWidget):
     def __init__(self, parent = None):
-        super(Authentication, self).__init__(parent)
+        super(SignIn, self).__init__(parent)
 
         self.labelUsername = QLabel("Username")
         self.editUsername = QLineEdit()
@@ -28,9 +31,9 @@ class Authentication(QWidget):
         self.logInButton = QPushButton("Enter")
         self.logInButton.setEnabled(False)
         self.editUsername.textChanged[str].connect(lambda: self.logInButton.setEnabled(self.editUsername.text() != "" 
-        and self.editPassword.text() != ""))
+                                                                                    and self.editPassword.text() != ""))
         self.editPassword.textChanged[str].connect(lambda: self.logInButton.setEnabled(self.editUsername.text() != "" 
-        and self.editPassword.text() != ""))
+                                                                                    and self.editPassword.text() != ""))
         self.logInButton.clicked.connect(self.logIn)
 
         self.exitButton = QPushButton("Exit")
@@ -59,24 +62,14 @@ class Authentication(QWidget):
 
         if query.isValid():
             self.close()
+            self.widget = QWidget()
+            self.admin = AdminMode()
+            self.admin.__init__(self.widget)
+            self.admin.init('../phonebook/datafile', 'QSQLITE')
+            self.widget.show()
         else:
             QMessageBox.critical(None, "Invalid", "Invalid username or password. Click cancel to exit.", QMessageBox.Cancel)
-        #    self.close()
-        # if query.isValid():
-        #     QMessageBox.critical(None, "Cannot open database",
-        #             "Unable to establish a database connection.\n"
-        #             "This example needs SQLite support. Please read the Qt SQL "
-        #             "driver documentation for information how to build it.\n\n"
-        #             "Click Cancel to exit.", QMessageBox.Cancel)
-        # else:
-        #     pass
-
-    def enableButton(self):
-        if len(self.editUsername.text()) > 0 and len(self.editPassword.text()) > 0:
-            self.logInButton.setEnabled(True)
-        else:
-            self.logInButton.setEnabled(False)
-
+    
     def db_connect(self, filename, server):
         db = QSqlDatabase.addDatabase(server)
         db.setDatabaseName(filename)
@@ -104,7 +97,7 @@ class Authentication(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    administrator = Authentication()
-    administrator.init('accounts', 'QSQLITE')
-    administrator.show()
+    signIn = SignIn()
+    signIn.init('../phonebook/accounts', 'QSQLITE')
+    signIn.show()
     sys.exit(app.exec_())

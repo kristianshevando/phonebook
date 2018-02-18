@@ -1,14 +1,14 @@
 import sys
 
-from PyQt5.QtSql import * 
+from PyQt5.QtSql import *
 from PyQt5.QtCore import Qt, QModelIndex
 from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QPushButton, \
- QTableWidget, QTableWidgetItem, QMessageBox, QHBoxLayout, QLineEdit, QLabel, QGridLayout     
+ QTableWidget, QTableWidgetItem, QMessageBox, QHBoxLayout, QLineEdit, QLabel, QGridLayout
 
 
-class PhoneBook(QWidget):
+class AdminMode(QWidget):
     def __init__(self, parent = None):
-        super(PhoneBook, self).__init__(parent)
+        super(AdminMode, self).__init__(parent)
         self.table = QTableWidget(0, 8)
         self.table.setHorizontalHeaderLabels(['ID', 'NAME', 'SURNAME', 'PHONE', 'CITY', 'STREET', 'HOUSE', 'APARTMENT'])
         self.table.setAlternatingRowColors(True)
@@ -70,23 +70,26 @@ class PhoneBook(QWidget):
         grid.addWidget(self.labelApartment, 7, 0)
         grid.addWidget(self.editApartment, 7, 1)
 
-        downloadDataButton = QPushButton("Download data")
-        downloadDataButton.clicked.connect(self.downloadData)
+        self.downloadDataButton = QPushButton("Download data")
+        self.downloadDataButton.clicked.connect(self.downloadData)
         
-        searchDataButton = QPushButton("Search data")
-        searchDataButton.clicked.connect(self.search)
+        self.searchDataButton = QPushButton("Search data")
+        self.searchDataButton.clicked.connect(self.search)
 
-        insertDataButton = QPushButton("Insert data")
-        insertDataButton.clicked.connect(self.insertData)
+        self.insertDataButton = QPushButton("Insert data")
+        self.insertDataButton.clicked.connect(self.insertData)
 
-        removeDataButton = QPushButton("Remove data")
-        removeDataButton.clicked.connect(self.removeData)
+        self.clearTableButton = QPushButton("Clear table")  
+        self.clearTableButton.clicked.connect(self.table.clearContents)
+
+        self.removeDataButton = QPushButton("Remove data")
+        self.removeDataButton.clicked.connect(self.removeData)
 
         hBox = QHBoxLayout()
-        hBox.addWidget(downloadDataButton)
-        hBox.addWidget(searchDataButton)
-        hBox.addWidget(insertDataButton)
-        hBox.addWidget(removeDataButton)
+        hBox.addWidget(self.downloadDataButton)
+        hBox.addWidget(self.searchDataButton)
+        hBox.addWidget(self.insertDataButton)
+        hBox.addWidget(self.removeDataButton)
 
         vBox = QVBoxLayout()
         vBox.addLayout(grid)
@@ -136,7 +139,7 @@ class PhoneBook(QWidget):
             self.table.setItem(index, 6, QTableWidgetItem(str(house)))
             self.table.setItem(index, 7, QTableWidgetItem(str(apartment)))
 
-            index += 1    
+            index += 1
 
     def downloadData(self, event):
         index = 0
@@ -218,9 +221,13 @@ class PhoneBook(QWidget):
             self.db_connect(filename, server)
 
 
+def main():
+    book = AdminMode()
+    book.show()
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    book = PhoneBook()
-    book.init('datafile', 'QSQLITE')
-    book.show()
+    administrator = AdminMode()
+    administrator.init('../phonebook/datafile', 'QSQLITE')
+    administrator.show()
     sys.exit(app.exec_())
