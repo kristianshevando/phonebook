@@ -5,199 +5,188 @@ from PyQt5.QtCore import Qt, QModelIndex
 from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QPushButton, \
  QTableWidget, QTableWidgetItem, QMessageBox, QHBoxLayout, QLineEdit, QLabel, QGridLayout
 
-
-class AdminMode(QWidget):
+class AdminModeWindow(QWidget):
     def __init__(self, parent = None):
-        super(AdminMode, self).__init__(parent)
-        self.table = QTableWidget(0, 8)
-        self.table.setHorizontalHeaderLabels(['ID', 'NAME', 'SURNAME', 'PHONE', 'CITY', 'STREET', 'HOUSE', 'APARTMENT'])
-        self.table.setAlternatingRowColors(True)
-        self.table.setEditTriggers(QTableWidget.NoEditTriggers)
-        self.table.setSelectionBehavior(QTableWidget.SelectRows)
-        self.table.setSelectionMode(QTableWidget.SingleSelection)
+        super(AdminModeWindow, self).__init__(parent)
+        self.phonebookTable = QTableWidget(0, 8)
+        self.phonebookTable.setHorizontalHeaderLabels(['ID', 'NAME', 'SURNAME', 'PHONE', 'CITY', 'STREET', 'HOUSE', 'APARTMENT'])
+        self.phonebookTable.setAlternatingRowColors(True)
+        self.phonebookTable.setEditTriggers(QTableWidget.NoEditTriggers)
+        self.phonebookTable.setSelectionBehavior(QTableWidget.SelectRows)
+        self.phonebookTable.setSelectionMode(QTableWidget.SingleSelection)
 
-        self.labelID = QLabel("ID")
-        self.editID = QLineEdit()
-        self.editID.setText("0")
-        self.editID.setPlaceholderText("Unique identification number")
+        self.idLabel = QLabel("ID")
+        self.idLineEdit = QLineEdit()
+        self.idLineEdit.setText("0")
+        self.idLineEdit.setPlaceholderText("Unique identification number")
 
-        self.labelName = QLabel("Name")
-        self.editName = QLineEdit()
-        self.editName.setPlaceholderText("Name")
+        self.nameLabel = QLabel("Name")
+        self.nameLineEdit = QLineEdit()
+        self.nameLineEdit.setPlaceholderText("Name")
 
-        self.labelSurname = QLabel("Surname")
-        self.editSurname = QLineEdit()
-        self.editSurname.setPlaceholderText("Surname")
+        self.surnameLabel = QLabel("Surname")
+        self.surnameLineEdit = QLineEdit()
+        self.surnameLineEdit.setPlaceholderText("Surname")
 
-        self.labelPhone = QLabel("Phone")
-        self.editPhone = QLineEdit()
-        self.editPhone.setText("0")
-        self.editPhone.setPlaceholderText("Phone number")
+        self.phoneLabel = QLabel("Phone")
+        self.phoneLineEdit = QLineEdit()
+        self.phoneLineEdit.setText("0")
+        self.phoneLineEdit.setPlaceholderText("Phone number")
 
-        self.labelCity = QLabel("City")
-        self.editCity = QLineEdit()
-        self.editCity.setPlaceholderText("City name")
+        self.cityLabel = QLabel("City")
+        self.cityLineEdit = QLineEdit()
+        self.cityLineEdit.setPlaceholderText("City name")
 
-        self.labelStreet = QLabel("Street")
-        self.editStreet = QLineEdit()
-        self.editStreet.setPlaceholderText("Street name")
+        self.streetLabel = QLabel("Street")
+        self.streetLineEdit = QLineEdit()
+        self.streetLineEdit.setPlaceholderText("Street name")
 
-        self.labelHouse = QLabel("House")
-        self.editHouse = QLineEdit()
-        self.editHouse.setText("0")
-        self.editHouse.setPlaceholderText("House number")
+        self.houseLabel = QLabel("House")
+        self.houseLineEdit = QLineEdit()
+        self.houseLineEdit.setText("0")
+        self.houseLineEdit.setPlaceholderText("House number")
 
-        self.labelApartment = QLabel("Apartment")
-        self.editApartment = QLineEdit()
-        self.editApartment.setText("0")
-        self.editApartment.setPlaceholderText("Apartment number")
+        self.apartmentLabel = QLabel("Apartment")
+        self.apartmentLineEdit = QLineEdit()
+        self.apartmentLineEdit.setText("0")
+        self.apartmentLineEdit.setPlaceholderText("Apartment number")
 
         grid = QGridLayout()
-        grid.addWidget(self.labelID, 0, 0)
-        grid.addWidget(self.editID, 0, 1)
-        grid.addWidget(self.labelName, 1, 0)
-        grid.addWidget(self.editName, 1, 1)
-        grid.addWidget(self.labelSurname, 2, 0)
-        grid.addWidget(self.editSurname, 2, 1)
-        grid.addWidget(self.labelPhone, 3, 0)
-        grid.addWidget(self.editPhone, 3, 1)
-        grid.addWidget(self.labelCity, 4, 0)
-        grid.addWidget(self.editCity, 4, 1)
-        grid.addWidget(self.labelStreet, 5, 0)
-        grid.addWidget(self.editStreet, 5, 1)
-        grid.addWidget(self.labelHouse, 6, 0)
-        grid.addWidget(self.editHouse, 6, 1)
-        grid.addWidget(self.labelApartment, 7, 0)
-        grid.addWidget(self.editApartment, 7, 1)
+        grid.addWidget(self.idLabel, 0, 0)
+        grid.addWidget(self.idLineEdit, 0, 1)
+        grid.addWidget(self.nameLabel, 1, 0)
+        grid.addWidget(self.nameLineEdit, 1, 1)
+        grid.addWidget(self.surnameLabel, 2, 0)
+        grid.addWidget(self.surnameLineEdit, 2, 1)
+        grid.addWidget(self.phoneLabel, 3, 0)
+        grid.addWidget(self.phoneLineEdit, 3, 1)
+        grid.addWidget(self.cityLabel, 4, 0)
+        grid.addWidget(self.cityLineEdit, 4, 1)
+        grid.addWidget(self.streetLabel, 5, 0)
+        grid.addWidget(self.streetLineEdit, 5, 1)
+        grid.addWidget(self.houseLabel, 6, 0)
+        grid.addWidget(self.houseLineEdit, 6, 1)
+        grid.addWidget(self.apartmentLabel, 7, 0)
+        grid.addWidget(self.apartmentLineEdit, 7, 1)
 
-        self.downloadDataButton = QPushButton("Download data")
+        self.downloadDataButton = QPushButton("Download")
         self.downloadDataButton.clicked.connect(self.downloadData)
         
-        self.searchDataButton = QPushButton("Search data")
+        self.searchDataButton = QPushButton("Search")
         self.searchDataButton.clicked.connect(self.search)
 
-        self.insertDataButton = QPushButton("Insert data")
+        self.insertDataButton = QPushButton("Insert")
         self.insertDataButton.clicked.connect(self.insertData)
 
-        self.clearTableButton = QPushButton("Clear table")  
-        self.clearTableButton.clicked.connect(self.table.clearContents)
+        self.clearTableButton = QPushButton("Clear")  
+        self.clearTableButton.clicked.connect(self.phonebookTable.clearContents)
 
-        self.removeDataButton = QPushButton("Remove data")
+        self.removeDataButton = QPushButton("Remove")
         self.removeDataButton.clicked.connect(self.removeData)
 
         hBox = QHBoxLayout()
         hBox.addWidget(self.downloadDataButton)
         hBox.addWidget(self.searchDataButton)
         hBox.addWidget(self.insertDataButton)
+        hBox.addWidget(self.clearTableButton)
         hBox.addWidget(self.removeDataButton)
+
+        vBoxAsWidget = QWidget()
 
         vBox = QVBoxLayout()
         vBox.addLayout(grid)
         vBox.addLayout(hBox)
         vBox.setAlignment(Qt.AlignTop)
-        vBox.addWidget(self.table)
+        vBoxAsWidget = QWidget()
+        vBoxAsWidget.setLayout(vBox)
+        vBoxAsWidget.setFixedWidth(400)
+
+
+        fullBox = QHBoxLayout()
+        fullBox.addWidget(vBoxAsWidget)
+        fullBox.addWidget(self.phonebookTable)
 
         self.setWindowTitle("Phonebook")
-        self.resize(824, 320)
-        self.setLayout(vBox)
+        self.resize(1230, 320)
+        self.setLayout(fullBox)
 
     def search(self, event):
-        widget = QWidget()
-        index = 0
+        idText        = int(self.idLineEdit.text())
+        nameText      = self.nameLineEdit.text()
+        surnameText   = self.surnameLineEdit.text()
+        phoneText     = int(self.phoneLineEdit.text())
+        cityText      = self.cityLineEdit.text()
+        streetText    = self.streetLineEdit.text()
+        houseText     = int(self.houseLineEdit.text())
+        apartmentText = int(self.apartmentLineEdit.text())
 
-        idText = int(self.editID.text())
-        nameText = self.editName.text()
-        surnameText = self.editSurname.text()
-        phoneText = int(self.editPhone.text())
-        cityText = self.editCity.text()
-        streetText = self.editStreet.text()
-        houseText = int(self.editHouse.text())
-        apartmentText = int(self.editApartment.text())
-
-        query = QSqlQuery()
-        query.exec_("select * from phonebook where id like {0} or name like '{1}' or surname like '{2}' " 
+        searchQuery = QSqlQuery()
+        searchQuery.exec_("select * from phonebook where id like {0} or name like '{1}' or surname like '{2}' " 
                    "or phone like {3} or city like '{4}' or street like '{5}' or house like {6} or apartment like {7}"
                    .format(idText, nameText, surnameText, phoneText, cityText, streetText, houseText, apartmentText))
-        
-        while query.next():
-            ids = query.value(0)
-            name = query.value(1)
-            surname = query.value(2)
-            phone = query.value(3)
-            city = query.value(4)
-            street = query.value(5)
-            house = query.value(6)
-            apartment = query.value(7)
 
-            self.table.setRowCount(index + 1)
-            self.table.setItem(index, 0, QTableWidgetItem(str(ids)))
-            self.table.setItem(index, 1, QTableWidgetItem(name))
-            self.table.setItem(index, 2, QTableWidgetItem(surname))
-            self.table.setItem(index, 3, QTableWidgetItem(str(phone)))
-            self.table.setItem(index, 4, QTableWidgetItem(city))
-            self.table.setItem(index, 5, QTableWidgetItem(street))
-            self.table.setItem(index, 6, QTableWidgetItem(str(house)))
-            self.table.setItem(index, 7, QTableWidgetItem(str(apartment)))
+        self.showData(searchQuery)
+
+    def showData(self, query):
+        index = 0
+
+        while query.next():
+            idQueryValue        = query.value(0)
+            nameQueryValue      = query.value(1)
+            surnameQueryValue   = query.value(2)
+            phoneQueryValue     = query.value(3)
+            cityQueryValue      = query.value(4)
+            streetQueryValue    = query.value(5)
+            houseQueryValue     = query.value(6)
+            apartmentQueryValue = query.value(7)
+
+            self.phonebookTable.setRowCount(index + 1)
+            self.phonebookTable.setItem(index, 0, QTableWidgetItem(str(idQueryValue)))
+            self.phonebookTable.setItem(index, 1, QTableWidgetItem(nameQueryValue))
+            self.phonebookTable.setItem(index, 2, QTableWidgetItem(surnameQueryValue))
+            self.phonebookTable.setItem(index, 3, QTableWidgetItem(str(phoneQueryValue)))
+            self.phonebookTable.setItem(index, 4, QTableWidgetItem(cityQueryValue))
+            self.phonebookTable.setItem(index, 5, QTableWidgetItem(streetQueryValue))
+            self.phonebookTable.setItem(index, 6, QTableWidgetItem(str(houseQueryValue)))
+            self.phonebookTable.setItem(index, 7, QTableWidgetItem(str(apartmentQueryValue)))
 
             index += 1
 
     def downloadData(self, event):
-        index = 0
-        query = QSqlQuery()
-        query.exec_("select * from phonebook")
-
-        while query.next():
-            ids = query.value(0)
-            name = query.value(1)
-            surname = query.value(2)
-            phone = query.value(3)
-            city = query.value(4)
-            street = query.value(5)
-            house = query.value(6)
-            apartment = query.value(7)
-
-            self.table.setRowCount(index + 1)
-            self.table.setItem(index, 0, QTableWidgetItem(str(ids)))
-            self.table.setItem(index, 1, QTableWidgetItem(name))
-            self.table.setItem(index, 2, QTableWidgetItem(surname))
-            self.table.setItem(index, 3, QTableWidgetItem(str(phone)))
-            self.table.setItem(index, 4, QTableWidgetItem(city))
-            self.table.setItem(index, 5, QTableWidgetItem(street))
-            self.table.setItem(index, 6, QTableWidgetItem(str(house)))
-            self.table.setItem(index, 7, QTableWidgetItem(str(apartment)))
-
-            index += 1
+        downloadDataQuery = QSqlQuery()
+        downloadDataQuery.exec_("select * from phonebook")
+        self.showData(downloadDataQuery)
 
     def insertData(self, event):
-        ids = int(self.editID.text())
-        name = self.editName.text()
-        surname = self.editSurname.text()
-        phone = int(self.editPhone.text())
-        city = self.editCity.text()
-        street = self.editStreet.text()
-        house = int(self.editHouse.text())
-        apartment = int(self.editApartment.text())
+        idText        = int(self.idLineEdit.text())
+        nameText      = self.nameLineEdit.text()
+        surnameText   = self.surnameLineEdit.text()
+        phoneText     = int(self.phoneLineEdit.text())
+        cityText      = self.cityLineEdit.text()
+        streetText    = self.streetLineEdit.text()
+        houseText     = int(self.houseLineEdit.text())
+        apartmentText = int(self.apartmentLineEdit.text())
 
-        query = QSqlQuery()
-        query.exec_("insert into phonebook values({0}, '{1}', '{2}', {3}, '{4}', '{5}', {6}, {7})".
-        format(ids, name, surname, phone, city, street, house, apartment))
+        insertDataQuery = QSqlQuery()
+        insertDataQuery.exec_("insert into phonebook values({0}, '{1}', '{2}', {3}, '{4}', '{5}', {6}, {7})".
+                    format(idText, nameText, surnameText, phoneText, cityText, streetText, houseText, apartmentText))
 
     def removeData(self, event):
-        selected = self.table.currentIndex()
-        if not selected.isValid() or len(self.table.selectedItems()) < 1:
+        selected = self.phonebookTable.currentIndex()
+        if not selected.isValid() or len(self.phonebookTable.selectedItems()) < 1:
             return
 
-        ids = self.table.selectedItems()[0]
+        ids = self.phonebookTable.selectedItems()[0]
         query = QSqlQuery()
-        query.exec_("remove from phonebook where id = " + ids.text())
+        query.exec_("remove from phonebook where id = {0}".format(ids.text()))
 
-        self.table.removeRow(selected.row())
-        self.table.setCurrentIndex(QModelIndex())
+        self.phonebookTable.removeRow(selected.row())
+        self.phonebookTable.setCurrentIndex(QModelIndex())
 
-    def db_connect(self, filename, server):
-        db = QSqlDatabase.addDatabase(server)
-        db.setDatabaseName(filename)
-        if not db.open():
+    def connectToDatabase(self, filename, server):
+        database = QSqlDatabase.addDatabase(server)
+        database.setDatabaseName(filename)
+        if not database.open():
             QMessageBox.critical(None, "Cannot open database",
                     "Unable to establish a database connection.\n"
                     "This example needs SQLite support. Please read the Qt SQL "
@@ -206,28 +195,24 @@ class AdminMode(QWidget):
             return False
         return True
 
-    def db_create(self):
-        query = QSqlQuery()
-        query.exec_("create table phonebook(id int primary key, "
+    def createDatabase(self):
+        createDatabaseQuery = QSqlQuery()
+        createDatabaseQuery.exec_("create table phonebook(id int primary key, "
                    "name varchar(20), surname varchar(20), phone int(10), city varchar(15), "
                    "street varchar(15), house int(6), apartment int(6))")
 
-    def init(self, filename, server):
+    def initialize(self, filename, server):
         import os
         if not os.path.exists(filename):
-            self.db_connect(filename, server)
-            self.db_create()
+            self.connectToDatabase(filename, server)
+            self.createDatabase()
         else:
-            self.db_connect(filename, server)
+            self.connectToDatabase(filename, server)
 
-
-def main():
-    book = AdminMode()
-    book.show()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    administrator = AdminMode()
-    administrator.init('../phonebook/datafile', 'QSQLITE')
-    administrator.show()
+    adminModeWindowObject = AdminModeWindow()
+    adminModeWindowObject.initialize('../phonebook/datafile', 'QSQLITE')
+    adminModeWindowObject.show()
     sys.exit(app.exec_())

@@ -1,10 +1,12 @@
-import pypyodbc
+import socket
 
-SQLServer = "localhost"
-Database = "phonebook"
+# import pypyodbc
 
-connection = pypyodbc.connect('Driver={SQL Server};'
-                              'Server=' + SQLServer + ';'
-                              'Database=' + Database + ';')
+# SQLServer = "localhost"
+# Database = "phonebook"
 
-cursor = connection.cursor()
+# connection = pypyodbc.connect('Driver={SQL Server};'
+#                               'Server=' + SQLServer + ';'
+#                               'Database=' + Database + ';')
+
+# cursor = connection.cursor()

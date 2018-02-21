@@ -7,40 +7,40 @@ from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QPushButton, \
 
 
 
-class SignUp(QWidget):
+class SignUpWindow(QWidget):
     def __init__(self, parent = None):
-        super(SignUp, self).__init__(parent)
+        super(SignUpWindow, self).__init__(parent)
 
-        self.labelUsername = QLabel("Username")
-        self.editUsername = QLineEdit()
-        self.editUsername.setPlaceholderText("Create username")
+        self.usernameLabel = QLabel("Username")
+        self.usernameLineEdit = QLineEdit()
+        self.usernameLineEdit.setPlaceholderText("Create username")
 
-        self.labelPassword = QLabel("Password")
-        self.editPassword = QLineEdit()
-        self.editPassword.setPlaceholderText("Create password")
-        self.editPassword.setEchoMode(QLineEdit.Password)
+        self.passwordLabel = QLabel("Password")
+        self.passwordLineEdit = QLineEdit()
+        self.passwordLineEdit.setPlaceholderText("Create password")
+        self.passwordLineEdit.setEchoMode(QLineEdit.Password)
 
-        self.labelConfirmPassword = QLabel("Confirm password")
-        self.editConfirmPassword = QLineEdit()
-        self.editConfirmPassword.setPlaceholderText("Confirm password")
-        self.editConfirmPassword.setEchoMode(QLineEdit.Password)
+        self.confirmPasswordLabel = QLabel("Confirm password")
+        self.confirmPasswordLineEdit = QLineEdit()
+        self.confirmPasswordLineEdit.setPlaceholderText("Confirm password")
+        self.confirmPasswordLineEdit.setEchoMode(QLineEdit.Password)
 
         grid = QGridLayout()
-        grid.addWidget(self.labelUsername, 0, 0)
-        grid.addWidget(self.editUsername, 0, 1)
-        grid.addWidget(self.labelPassword, 1, 0)
-        grid.addWidget(self.editPassword, 1, 1)
-        grid.addWidget(self.labelConfirmPassword, 2, 0)
-        grid.addWidget(self.editConfirmPassword, 2, 1)
+        grid.addWidget(self.usernameLabel, 0, 0)
+        grid.addWidget(self.usernameLineEdit, 0, 1)
+        grid.addWidget(self.passwordLabel, 1, 0)
+        grid.addWidget(self.passwordLineEdit, 1, 1)
+        grid.addWidget(self.confirmPasswordLabel, 2, 0)
+        grid.addWidget(self.confirmPasswordLineEdit, 2, 1)
 
         self.signUpButton = QPushButton("Sign up")
         self.signUpButton.setEnabled(False)
-        self.editUsername.textChanged[str].connect(lambda: self.signUpButton.setEnabled(self.editUsername.text() != ""
-                                                    and self.editPassword.text() != "" and self.editConfirmPassword.text() != ""))
-        self.editPassword.textChanged[str].connect(lambda: self.signUpButton.setEnabled(self.editUsername.text() != ""
-                                                    and self.editPassword.text() != "" and self.editConfirmPassword.text() != ""))
-        self.editConfirmPassword.textChanged[str].connect(lambda: self.signUpButton.setEnabled(self.editUsername.text() != ""
-                                                    and self.editPassword.text() != "" and self.editConfirmPassword.text() != ""))
+        self.usernameLineEdit.textChanged[str].connect(lambda: self.signUpButton.setEnabled(self.usernameLineEdit.text() != ""
+                                            and self.passwordLineEdit.text() != "" and self.confirmPasswordLineEdit.text() != ""))
+        self.passwordLineEdit.textChanged[str].connect(lambda: self.signUpButton.setEnabled(self.usernameLineEdit.text() != ""
+                                            and self.passwordLineEdit.text() != "" and self.confirmPasswordLineEdit.text() != ""))
+        self.confirmPasswordLineEdit.textChanged[str].connect(lambda: self.signUpButton.setEnabled(self.usernameLineEdit.text() != ""
+                                            and self.passwordLineEdit.text() != "" and self.confirmPasswordLineEdit.text() != ""))
         self.signUpButton.clicked.connect(self.signUp)
 
         self.exitButton = QPushButton("Exit")
@@ -60,21 +60,21 @@ class SignUp(QWidget):
         self.setLayout(vBox)
 
     def signUp(self):
-        username = self.editUsername.text()
-        password = self.editPassword.text()
-        confirmPassword = self.editConfirmPassword.text()
+        usernameText        = self.usernameLineEdit.text()
+        passwordText        = self.passwordLineEdit.text()
+        confirmPasswordText = self.confirmPasswordLineEdit.text()
 
-        query = QSqlQuery()
+        signUpQuery = QSqlQuery()
 
-        if password == confirmPassword:
-            query.exec_("insert into accounts values('{0}', '{1}')".format(username, password))
+        if passwordText == confirmPasswordText:
+            signUpQuery.exec_("insert into accounts values('{0}', '{1}')".format(usernameText, passwordText))
         else:
             QMessageBox.critical(None, "Error", "Passwords are not equal.\n Try again. Click cancel to exit.", QMessageBox.Cancel)
 
-    def db_connect(self, filename, server):
-        db = QSqlDatabase.addDatabase(server)
-        db.setDatabaseName(filename)
-        if not db.open():
+    def connectToDatabase(self, filename, server):
+        database = QSqlDatabase.addDatabase(server)
+        database.setDatabaseName(filename)
+        if not database.open():
             QMessageBox.critical(None, "Cannot open database",
                     "Unable to establish a database connection.\n"
                     "This example needs SQLite support. Please read the Qt SQL "
@@ -83,22 +83,22 @@ class SignUp(QWidget):
             return False
         return True
 
-    def db_create(self):
-        query = QSqlQuery()
-        query.exec_("create table accounts(username varchar(20), password varchar(20))")
+    def createDatabase(self):
+        createDatabaseQuery = QSqlQuery()
+        createDatabaseQuery.exec_("create table accounts(username varchar(20), password varchar(20))")
 
-    def init(self, filename, server):
+    def initialize(self, filename, server):
         import os
         if not os.path.exists(filename):
-            self.db_connect(filename, server)
-            self.db_create()
+            self.connectToDatabase(filename, server)
+            self.createDatabase()
         else:
-            self.db_connect(filename, server)
+            self.connectToDatabase(filename, server)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    administrator = SignUp()
-    administrator.init('../phonebook/accounts', 'QSQLITE')
-    administrator.show()
+    signUpWindowObject = SignUpWindow()
+    signUpWindowObject.initialize('../phonebook/accounts', 'QSQLITE')
+    signUpWindowObject.show()
     sys.exit(app.exec_())
 
