@@ -1,0 +1,5 @@
+{
+    "ACCOUNTS_FILE_PATH": "./accounts",
+    "DATA_FILE_PATH": "./datafile",
+    "SERVER": "QSQLITE"
+}

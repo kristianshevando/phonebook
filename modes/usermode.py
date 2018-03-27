@@ -2,11 +2,11 @@ import sys
 
 from PyQt5.QtSql import * 
 from PyQt5.QtCore import Qt, QModelIndex
-from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QPushButton, \
+from PyQt5.QtWidgets import QDialog, QApplication, QVBoxLayout, QPushButton, \
  QTableWidget, QTableWidgetItem, QMessageBox, QHBoxLayout, QLineEdit, QLabel, QGridLayout     
 from PyQt5 import QtNetwork
 
-class UserModeWindow(QWidget):
+class UserModeWindow(QDialog):
     def __init__(self, parent = None):
         super(UserModeWindow, self).__init__(parent)
 
@@ -82,7 +82,7 @@ class UserModeWindow(QWidget):
         vBox.addLayout(grid)
         vBox.addLayout(hBox)
         vBox.setAlignment(Qt.AlignTop)
-        vBoxAsWidget = QWidget()
+        vBoxAsWidget = QDialog()
         vBoxAsWidget.setLayout(vBox)
         vBoxAsWidget.setFixedWidth(400)
 

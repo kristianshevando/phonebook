@@ -1,11 +1,11 @@
 import sys
 
 from PyQt5.QtSql import *
-from PyQt5.QtCore import Qt, QModelIndex
-from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QPushButton, \
+from PyQt5.QtCore import Qt, QModelIndex, QRegExp
+from PyQt5.QtWidgets import QDialog, QApplication, QVBoxLayout, QPushButton, \
  QTableWidget, QTableWidgetItem, QMessageBox, QHBoxLayout, QLineEdit, QLabel, QGridLayout
 
-class AdminModeWindow(QWidget):
+class AdminModeWindow(QDialog):
     def __init__(self, parent = None):
         super(AdminModeWindow, self).__init__(parent)
         self.phonebookTable = QTableWidget(0, 8)
@@ -91,13 +91,13 @@ class AdminModeWindow(QWidget):
         hBox.addWidget(self.clearTableButton)
         hBox.addWidget(self.removeDataButton)
 
-        vBoxAsWidget = QWidget()
+        #vBoxAsWidget = ()
 
         vBox = QVBoxLayout()
         vBox.addLayout(grid)
         vBox.addLayout(hBox)
         vBox.setAlignment(Qt.AlignTop)
-        vBoxAsWidget = QWidget()
+        vBoxAsWidget = QDialog()
         vBoxAsWidget.setLayout(vBox)
         vBoxAsWidget.setFixedWidth(400)
 

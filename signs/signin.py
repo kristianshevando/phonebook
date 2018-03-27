@@ -1,15 +1,22 @@
 import sys
+import os.path
+import json
 
-sys.path.append("../phonebook/modes/")
-from adminmode import AdminModeWindow
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from PyQt5.QtSql import *  
-from PyQt5.QtCore import Qt, QModelIndex
-from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QPushButton, \
- QTableWidget, QTableWidgetItem, QMessageBox, QHBoxLayout, QLineEdit, QLabel, QGridLayout 
+import servers.server
+from modes.adminmode import AdminModeWindow
+from signup import SignUpWindow
 
+from PyQt5.QtSql import *
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QDialog, QApplication, QVBoxLayout, QPushButton,\
+                            QMessageBox, QHBoxLayout, QLineEdit, QLabel, QGridLayout 
 
-class SignInWindow(QWidget):
+with open('../phonebook/config.json') as json_file:
+    config = json.load(json_file)
+
+class SignInWindow(QDialog):
     def __init__(self, parent = None):
         super(SignInWindow, self).__init__(parent)
 
@@ -62,18 +69,18 @@ class SignInWindow(QWidget):
 
         if signInQuery.isValid():
             self.close()
-            self.widget = QWidget()
+            self.adminModeWidget = QDialog()
             self.adminModeWindowObject = AdminModeWindow()
-            self.adminModeWindowObject.__init__(self.widget)
+            self.adminModeWindowObject.__init__(self.adminModeWidget)
             self.adminModeWindowObject.initialize('../phonebook/datafile', 'QSQLITE')
-            self.widget.show()
+            self.adminModeWindowObject.show()
         else:
             QMessageBox.critical(None, "Invalid", "Invalid username or password. Click cancel to exit.", QMessageBox.Cancel)
     
     def connectToDatabase(self, filename, server):
-        database = QSqlDatabase.addDatabase(server)
-        database.setDatabaseName(filename)
-        if not database.open():
+        accountsDatabase = QSqlDatabase.addDatabase(server)
+        accountsDatabase.setDatabaseName(filename)
+        if not accountsDatabase.open():
             QMessageBox.critical(None, "Cannot open database",
                     "Unable to establish a database connection.\n"
                     "This example needs SQLite support. Please read the Qt SQL "
@@ -89,8 +96,13 @@ class SignInWindow(QWidget):
     def initialize(self, filename, server):
         import os
         if not os.path.exists(filename):
-            self.connectToDatabase(filename, server)
-            self.createDatabase()
+            # self.connectToDatabase(filename, server)
+            # self.createDatabase()
+            self.signUpWidget = QDialog()
+            self.signUpWindowObject = SignUpWindow()
+            self.signUpWindowObject.__init__(self.signUpWidget)
+            self.signUpWindowObject.initialize(config['ACCOUNTS_FILE_PATH'], config['SERVER'])
+            self.signUpWindowObject.show()
         else:
             self.connectToDatabase(filename, server)
 
@@ -98,6 +110,7 @@ class SignInWindow(QWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     signInWindowObject = SignInWindow()
-    signInWindowObject.initialize('../phonebook/accounts', 'QSQLITE')
+    signInWindowObject.initialize(config['ACCOUNTS_FILE_PATH'], config['SERVER'])
     signInWindowObject.show()
+    # signInWindowObject.show()
     sys.exit(app.exec_())
